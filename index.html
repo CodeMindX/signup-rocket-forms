@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Podio Form with UTM Tracking</title>
+    <style>
+        /* Hides the UTM field by label or input name */
+        .utm-field-container,
+        input[name="utm_params"] {
+            display: none !important;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- BEGIN Podio web form -->
+    <script src="https://podio.com/webforms/30155708/2524141.js"></script>
+    <script type="text/javascript">
+        _podioWebForm.render("2524141");
+    </script>
+    <noscript>
+        <a href="https://podio.com/webforms/30155708/2524141" target="_blank">Please fill out the form</a>
+    </noscript>
+    <div class="podio-webform-container">
+        A webform by <a class="podio-webform-inner" rel="nofollow" href="https://podio.com">Podio</a>
+    </div>
+    <!-- END Podio web form -->
+
+    <script>
+        // Wait for the form to be rendered
+        window.addEventListener('load', function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            const utms = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'];
+            const values = utms.map(key => `${key}=${urlParams.get(key) || ''}`).join('&');
+
+            // Try filling in the hidden UTM field
+            const tryFill = () => {
+                const field = document.querySelector('input[name="utm_params"]');
+                if (field) {
+                    field.value = values;
+                    field.parentElement.style.display = 'none'; // Extra hide just in case
+                } else {
+                    // Retry after short delay in case form hasn't fully rendered
+                    setTimeout(tryFill, 500);
+                }
+            };
+
+            tryFill();
+        });
+    </script>
+</body>
+
+</html>
